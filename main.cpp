@@ -24,6 +24,7 @@ vector<char> readBinary(string filename) {
     vector<char> buffer;
     buffer.reserve(fileSize);
     buffer.assign(start,end);
+    file.close();
     return buffer;
 }
 
@@ -37,10 +38,11 @@ bool translateBinary(vector <char> preFiltered) {
     for (int i = 0; i < preFiltered.size(); i++) {
         temp = preFiltered[i];
         int charNum = static_cast<int>(static_cast<unsigned char>(preFiltered[i]));
+        unsigned char modifier = (static_cast<unsigned char>(preFiltered[i]));
         //cout << "char num for this number is: " << charNum << endl;
         //cout << static_cast<int>(static_cast<unsigned char>(preFiltered[i])) << endl;
         if ((charNum > -1 && charNum < 32)){
-            temp = (char) (static_cast<int>(static_cast<unsigned char>(preFiltered[i])) + 64);
+            temp = (char) (static_cast<int> (modifier + 64));
             //temp = static_cast<unsigned char>(static_cast<int>(preFiltered[i]) + 64);
             if (temp == "J"){
                 filteredData.push_back("\n");
@@ -53,12 +55,16 @@ bool translateBinary(vector <char> preFiltered) {
             }
         }
         else if (charNum == 127) {
-            temp = (char) (static_cast<int>(static_cast<unsigned char>(preFiltered[i])) - 64);
+            temp = (char) (static_cast<int>(modifier - 64));
             filteredData.push_back("^" + temp);
         }
         else if (charNum > 127 && charNum < 160) {
             // extra printable char at end is - 64
-            temp = (char) (static_cast<int>(static_cast<unsigned char>(preFiltered[i])) - 64);
+            temp = (char) (static_cast<int>(modifier - 64));
+            filteredData.push_back("M-^" + temp);
+        }
+        else if (charNum == 255){
+            temp = (char) (static_cast<int>(modifier - 128));
             filteredData.push_back("M-^" + temp);
         }
         else if ( charNum >= 160) {
@@ -79,30 +85,61 @@ bool translateBinary(vector <char> preFiltered) {
 
 int main(int argc, char *argv[])
 {
-
+    int offset = 0;
     // make sure there is input going in
     if (argc < 2) {
     cout << argc << endl;
     cout << argv[1] << endl;
     }
+
+    // create flags
+    bool vFlag = false;
+    bool eFlag = false;
+    bool nFlag= false;
+
+    // parse arguments to set flag validity
+    for (int i = 1; i < argc; ++i){
+        if (argv[i][0] == '-'){
+            offset = i + 1;
+            string argumentFlag = argv[i];
+            if(argumentFlag.find('E')){
+                eFlag = true;
+            }
+            if(argumentFlag.find("n")){
+                nFlag = true;
+            }
+            if(argumentFlag.find("v")){
+                vFlag = true;
+            }
+        }
+    }
+
     int fileCount = 1;
+    if (offset != 0){
+        fileCount = offset;
+    }
     // iterate through all possible files fed
     while (fileCount != argc){
     string fileInput = argv[fileCount];
     fileCount++;
-    translateBinary(readBinary(fileInput));
-    ifstream myFile (fileInput);
-    string line;
-    // if (myFile.is_open()){
-    //     // feed line from file into line variable
-    //     while (getline(myFile, line)) {
-    //         cout << line << "\n";
-    //     }
-    //     myFile.close();
-    // }
-    // else {
-    //     cout << "COULDNT FIND FILE";
-    // }
+    // if binary flags are enabled, use binary
+    if (vFlag || eFlag) {
+        translateBinary(readBinary(fileInput));
+    }
+    else {
+        ifstream myFile (fileInput);
+        string line;
+        if (myFile.is_open()){
+            // feed line from file into line variable
+            while (getline(myFile, line)) {
+                cout << line << "\n";
+            }
+            myFile.close();
+        }
+     else {
+         cout << "COULDNT FIND FILE";
+          }
+         }
     }
     return 0;
 }
