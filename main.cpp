@@ -53,12 +53,12 @@ bool translateBinary(vector <char> preFiltered) {
             temp = (char) (static_cast<int>(static_cast<unsigned char>(preFiltered[i])) - 64);
             filteredData.push_back("^" + temp);
         }
-        else if (charNum > 127 && charNum < 192) {
+        else if (charNum > 127 && charNum < 160) {
             // extra printable char at end is - 64
             temp = (char) (static_cast<int>(static_cast<unsigned char>(preFiltered[i])) - 64);
             filteredData.push_back("M-^" + temp);
         }
-        else if ( charNum >= 192) {
+        else if ( charNum >= 160) {
             temp = (char) (static_cast<int>(static_cast<unsigned char>(preFiltered[i])) - 128);
             filteredData.push_back("M-" + temp);
         }
