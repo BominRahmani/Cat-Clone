@@ -45,6 +45,9 @@ bool translateBinary(vector <char> preFiltered) {
             if (temp == "J"){
                 filteredData.push_back("\n");
             }
+            else if(temp == "I"){
+                filteredData.push_back("\t");
+            }
             else {
                 filteredData.push_back("^" + temp);
             }
