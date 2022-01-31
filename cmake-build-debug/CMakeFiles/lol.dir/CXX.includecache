@@ -6,13 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/Users/ozy/CLionProjects/lol/main.cpp
+/Users/ozy/CLionProjects/Cat-Clone/main.cpp
 stdio.h
 -
 iostream
 -
 fstream
 -
+unistd.h
+-
 string
+-
+vector
 -
 
