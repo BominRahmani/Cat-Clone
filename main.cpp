@@ -83,6 +83,10 @@ bool translateBinary(vector <char> preFiltered, bool sFlag, bool rFlag) {
             filteredData.push_back(temp);
             runningLine += temp;
         }
+        if (i == preFiltered.size() - 1){
+            reversedData.push_back("\n");
+            reversedData.push_back(runningLine);
+        }
     }
 
     if (sFlag){
@@ -104,7 +108,7 @@ bool translateBinary(vector <char> preFiltered, bool sFlag, bool rFlag) {
     }
 
     if(rFlag){
-        for (int i = filteredData.size() - 1; i >= 0; i--){
+        for (int i = reversedData.size() - 1; i >= 0; i--){
             cout << reversedData[i];
         }
     }
