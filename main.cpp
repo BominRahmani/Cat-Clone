@@ -102,18 +102,18 @@ int main(int argc, char *argv[])
         if (argv[i][0] == '-'){
             offset = i + 1;
             string argumentFlag = argv[i];
-            if(argumentFlag.find('E')){
+            if(argumentFlag.find('E') != string::npos){
                 eFlag = true;
             }
-            if(argumentFlag.find("n")){
+            if(argumentFlag.find("n") != string::npos){
                 nFlag = true;
             }
-            if(argumentFlag.find("v")){
+            if(argumentFlag.find("v") != string::npos){
                 vFlag = true;
             }
         }
     }
-
+    // find position of files and modify offset
     int fileCount = 1;
     if (offset != 0){
         fileCount = offset;
@@ -127,12 +127,18 @@ int main(int argc, char *argv[])
         translateBinary(readBinary(fileInput));
     }
     else {
+        int lineCount = 1;
+        string nFlagModifier = "";
         ifstream myFile (fileInput);
         string line;
         if (myFile.is_open()){
             // feed line from file into line variable
             while (getline(myFile, line)) {
-                cout << line << "\n";
+                if (nFlag){
+                    nFlagModifier = "\t" + to_string(lineCount) + "  ";
+                    }
+                cout << nFlagModifier + line << "\n";
+                lineCount++;
             }
             myFile.close();
         }
