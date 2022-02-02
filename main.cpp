@@ -70,7 +70,7 @@ bool translateBinary(vector <char> preFiltered, bool sFlag, bool rFlag) {
             runningLine += "M-^" + temp;
         }
         else if (charNum == 255){
-            temp = (char) (static_cast<int>(modifier - 128));
+            temp = (char) (static_cast<int>(modifier - 192));
             filteredData.push_back("M-^" + temp);
             runningLine += "M-^" + temp;
         }
