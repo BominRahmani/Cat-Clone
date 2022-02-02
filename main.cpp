@@ -84,7 +84,6 @@ bool translateBinary(vector <char> preFiltered, bool sFlag, bool rFlag) {
             runningLine += temp;
         }
         if (i == preFiltered.size() - 1){
-            reversedData.push_back("\n");
             reversedData.push_back(runningLine);
         }
     }
